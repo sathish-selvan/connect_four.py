@@ -16,6 +16,16 @@ screen = pygame.display.set_mode(size)
 board = np.zeros((6,7))
 myfont = pygame.font.SysFont("monospace",72)
 
+def is_board_full(board):
+    for i in range(0,6):
+        for j in range(0,7):
+            if board[i][j] == 0:
+                return True
+                break
+    else:
+        return False
+
+
 def is_wins(empty_list):
     global flag
     #horizontal check:
@@ -73,8 +83,8 @@ def check_win(board):
             for i in range(0,4):
                 empty_list.append(list(board[0+i+j][0+k:4+k]))
                 #print(empty_list)
-
-            if is_wins(empty_list)==False:
+            
+            if is_wins(empty_list)==False :
                 return "end"
             else:
                 empty_list.clear()
@@ -167,5 +177,17 @@ def main_loop(flag,turn,board):
                         
                     else:
                         print("Please enter valid input")
+
+        filled = is_board_full(board)
+        if filled == False:
+            pygame.draw.rect(screen,BLACK,(0,0,width,SQUAARESIZE))
+            lable = myfont.render("NO ONE WINS",1,BLUE)
+            screen.blit(lable,(40,10))
+            pygame.display.update()
+            pygame.time.wait(1000)
+            board = np.zeros((6,7))
+            draw_board(board)
+            main_loop(True,0,board)
+
 
 main_loop(flag,turn,board)
